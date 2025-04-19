@@ -17,3 +17,13 @@ export const createUserService = async (userData) => {
     throw error;
   }
 };
+
+export const getUserByIdService = async (userId) => {
+  try {
+    const user = await userDao.getById({ _id: userId });
+    return user;
+  } catch (error) {
+    console.error("Error al obtener usuario por ID:", error);
+    throw error;
+  }
+};

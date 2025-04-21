@@ -1,9 +1,15 @@
 import { userDao } from "../dao/user-dao";
-import { createPassword } from "../utils/user-utils";
+import { createPassword, comparePassword } from "../utils/user-utils.js";
+import { config } from "dotenv"
+import jwt from "jsonwebtoken";
+
+config({ path: "./config.env" });
+
+const SECRET_KEY = process.env.SECRET_KEY
 
 export const createUserService = async (userData) => {
   try {
-    const existingUser = await userDao.getById({ email: userData.email });
+    const existingUser = await userDao.getBy({ email: userData.email });
     if (existingUser) {
       throw new Error("El email ya esta registrado");
     }
@@ -24,6 +30,31 @@ export const getUserByIdService = async (userId) => {
     return user;
   } catch (error) {
     console.error("Error al obtener usuario por ID:", error);
+    throw error;
+  }
+};
+
+export const loginUserService = async (email, password) => {
+  try {
+    const user = await userDao.getById({ email });
+    if (!user) {
+      throw new Error("Usuario no encontrado");
+    }
+
+    const passwordMatch = comparePassword(password, user.password);
+    if (!passwordMatch) {
+      throw new Error("Contraseña incorrecta");
+    }
+
+    const token = jwt.sign(
+      { id: user._id, email: user.email, role: user.role },
+      SECRET_KEY,
+      { expiresIn: "1h"}
+    )
+
+    return token;
+  } catch (error) {
+    console.error("Error al realizar login:", error);
     throw error;
   }
 };

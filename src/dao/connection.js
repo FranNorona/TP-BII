@@ -1,7 +1,5 @@
 import { connect } from "mongoose";
-import { config } from "dotenv";
-
-config({ path: "./config.env" });
+import "dotenv/config";
 
 export const initMongoDB = async () => {
   try {

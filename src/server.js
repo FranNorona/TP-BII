@@ -1,10 +1,8 @@
 import express from "express";
 import routes from "./routes/index.js";
 import cookieParser from "cookie-parser";
-import { config } from "dotenv";
+import "dotenv/config";
 import { initMongoDB } from "./dao/connection.js";
-
-config({ path: "./config.env" });
 
 const app = express();
 

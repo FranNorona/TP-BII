@@ -1,9 +1,7 @@
 import passport from "passport";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { getUserByIdService } from "../../services/user-services.js";
-import { config } from "dotenv";
-
-config({ path: "./config.env" });
+import "dotenv/config";
 
 const strategyConfig = {
   jwtFromRequest: ExtractJwt.fromExtractors([

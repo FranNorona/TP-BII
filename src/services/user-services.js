@@ -1,9 +1,7 @@
 import { userDao } from "../dao/user-dao.js";
 import { createPassword, comparePassword } from "../utils/user-utils.js";
-import { config } from "dotenv";
+import "dotenv/config";
 import jwt from "jsonwebtoken";
-
-config({ path: "./config.env" });
 
 const SECRET_KEY = process.env.SECRET_KEY;
 

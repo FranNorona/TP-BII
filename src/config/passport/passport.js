@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import { getUserByIdService } from "../../services/user-services";
+import { getUserByIdService } from "../../services/user-services.js";
 import { config } from "dotenv";
 
 config({ path: "./config.env" });
@@ -11,7 +11,7 @@ const strategyConfig = {
 };
 
 passport.use(
-  new Strategy(strategyConfig, async (jwtPayload, done) => {
+  new JwtStrategy(strategyConfig, async (jwtPayload, done) => {
     try {
       const user = await getUserByIdService(jwtPayload.id);
       if (!user) {

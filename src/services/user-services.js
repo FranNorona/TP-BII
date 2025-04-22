@@ -1,11 +1,11 @@
-import { userDao } from "../dao/user-dao";
+import { userDao } from "../dao/user-dao.js";
 import { createPassword, comparePassword } from "../utils/user-utils.js";
-import { config } from "dotenv"
+import { config } from "dotenv";
 import jwt from "jsonwebtoken";
 
 config({ path: "./config.env" });
 
-const SECRET_KEY = process.env.SECRET_KEY
+const SECRET_KEY = process.env.SECRET_KEY;
 
 export const createUserService = async (userData) => {
   try {
@@ -36,7 +36,7 @@ export const getUserByIdService = async (userId) => {
 
 export const loginUserService = async (email, password) => {
   try {
-    const user = await userDao.getById({ email });
+    const user = await userDao.getBy({ email });
     if (!user) {
       throw new Error("Usuario no encontrado");
     }
@@ -49,8 +49,8 @@ export const loginUserService = async (email, password) => {
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
       SECRET_KEY,
-      { expiresIn: "1h"}
-    )
+      { expiresIn: "1h" }
+    );
 
     return token;
   } catch (error) {

@@ -27,6 +27,14 @@ export default class MongoDao {
     }
   };
 
+  getBy = async (query) => {
+    try {
+      return await this.model.findOne(query);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
   update = async (id, body) => {
     try {
       return await this.model.findByIdAndUpdate(id.body, { new: true });

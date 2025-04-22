@@ -8,7 +8,7 @@ config({ path: "./config.env" });
 const strategyConfig = {
   jwtFromRequest: ExtractJwt.fromExtractors([
     (req) => {
-      return req && req.cookies ? req.cookies["token"] : null; // Extraer el token desde la cookie llamada "token"
+      return req && req.cookies ? req.cookies["token"] : null;
     },
   ]),
   secretOrKey: process.env.SECRET_KEY,

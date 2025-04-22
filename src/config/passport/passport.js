@@ -6,7 +6,11 @@ import { config } from "dotenv";
 config({ path: "./config.env" });
 
 const strategyConfig = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: ExtractJwt.fromExtractors([
+    (req) => {
+      return req && req.cookies ? req.cookies["token"] : null; // Extraer el token desde la cookie llamada "token"
+    },
+  ]),
   secretOrKey: process.env.SECRET_KEY,
 };
 

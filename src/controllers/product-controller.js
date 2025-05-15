@@ -4,6 +4,7 @@ import {
   getProductByIdService,
   updateProductService,
   deleteProductService,
+  purchaseProductService,
 } from "../services/product-service.js";
 
 export const createProduct = async (req, res) => {
@@ -30,3 +31,17 @@ export const deleteProduct = async (req, res) => {
   await deleteProductService(req.params.id);
   res.status(204).send();
 };
+
+export const purchaseProduct = async (req, res) => {
+  const { id } = req.params;
+  const product = await getProductByIdService(id);
+
+  if (!product || product.stock <= 0) {
+    return res.status(400).json({ error: "Producto agotado o no disponible." });
+  }
+
+  await purchaseProductService(id);
+
+  res.json({ message: "Compra realizada con éxito.", product });
+};
+

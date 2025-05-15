@@ -19,3 +19,13 @@ export const updateProductService = async (id, updateData) => {
 export const deleteProductService = async (id) => {
   return await productRepository.deleteProduct(id);
 };
+
+export const purchaseProductService = async (id) => {
+  const product = await productRepository.getProductById(id);
+
+  if (!product || product.stock <= 0) {
+    throw new Error("Producto agotado o no disponible.");
+  }
+
+  return await productRepository.updateProduct(id, { stock: product.stock - 1 });
+};

@@ -6,10 +6,11 @@ import {
 import {
   addProductToCart,
   purchaseCart,
+  getCartByUserId,
 } from "../controllers/cart-controller.js";
 
 const router = Router();
-
+router.get("/:userId", authenticateJWT, authorizeRole("user"), getCartByUserId);
 router.post(
   "/:userId/product/:productId",
   authenticateJWT,

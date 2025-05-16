@@ -9,6 +9,27 @@ import {
   getProductByIdService,
 } from "../services/product-services.js";
 
+export const getCartByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const cart = await getCartByUserIdService(
+      new mongoose.Types.ObjectId(userId)
+    );
+
+    if (!cart) {
+      return res
+        .status(404)
+        .json({ error: "Carrito no encontrado para este usuario." });
+    }
+
+    res.json(cart);
+  } catch (error) {
+    console.error("Error al obtener carrito:", error);
+    res.status(500).json({ error: "Error al obtener el carrito." });
+  }
+};
+
 export const addProductToCart = async (req, res) => {
   try {
     const { userId, productId } = req.params;

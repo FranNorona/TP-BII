@@ -1,9 +1,9 @@
-import { Ticket } from "../dao/models/ticket-model";
+import { Ticket } from "../dao/models/ticket-model.js";
 
 class TicketRepository {
-    async createTicket(ticketData)  {
-        return await Ticket.create(ticketData);
-    }
+  async createTicket(ticketData) {
+    return await Ticket.create(ticketData);
+  }
 }
 
-export const TicketRepository = new TicketRepository();
+export default new TicketRepository();

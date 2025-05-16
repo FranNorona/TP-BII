@@ -1,15 +1,28 @@
-import { addProductToCartService, getCartByUserIdService } from "../services/cart-service.js";
+import mongoose from "mongoose";
+import {
+  addProductToCartService,
+  getCartByUserIdService,
+} from "../services/cart-services.js";
 import { generateTicketService } from "../services/ticket-service.js";
-import { updateProductService, getProductByIdService } from "../services/product-service.js";
+import {
+  updateProductService,
+  getProductByIdService,
+} from "../services/product-services.js";
 
 export const addProductToCart = async (req, res) => {
   try {
     const { userId, productId } = req.params;
     const { quantity } = req.body;
-
-    const updatedCart = await addProductToCartService(userId, productId, quantity);
+    console.log(userId, productId, quantity);
+    const updatedCart = await addProductToCartService(
+      new mongoose.Types.ObjectId(userId),
+      new mongoose.Types.ObjectId(productId),
+      quantity
+    );
+    console.log(updatedCart);
     res.json(updatedCart);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -17,10 +30,13 @@ export const addProductToCart = async (req, res) => {
 export const purchaseCart = async (req, res) => {
   try {
     const { cid } = req.params;
-    const cart = await getCartByUserIdService(cid);
+
+    const cart = await getCartByUserIdService(new mongoose.Types.ObjectId(cid));
 
     if (!cart || cart.products.length === 0) {
-      return res.status(400).json({ error: "El carrito está vacío o no existe." });
+      return res
+        .status(400)
+        .json({ error: "El carrito está vacío o no existe." });
     }
 
     let totalAmount = 0;
@@ -28,14 +44,21 @@ export const purchaseCart = async (req, res) => {
     const successfulPurchase = [];
 
     for (const item of cart.products) {
-      const product = await getProductByIdService(item.productId); // ✅ Obtener datos actuales del producto
+      const product = await getProductByIdService(
+        new mongoose.Types.ObjectId(item.productId)
+      );
 
       if (!product || product.stock < item.quantity) {
-        failedProducts.push(item.productId); // ✅ Si no hay stock suficiente, queda en el carrito
+        failedProducts.push(item.productId);
       } else {
         totalAmount += product.price * item.quantity;
-        await updateProductService(item.productId, { stock: product.stock - item.quantity });
-        successfulPurchase.push(item.productId); // ✅ Guardamos los productos comprados
+        await updateProductService(
+          new mongoose.Types.ObjectId(item.productId),
+          {
+            stock: product.stock - item.quantity,
+          }
+        );
+        successfulPurchase.push(item.productId);
       }
     }
 
@@ -43,8 +66,9 @@ export const purchaseCart = async (req, res) => {
       await generateTicketService(req.user.email, totalAmount);
     }
 
-    // ✅ Filtrar los productos comprados, dejando solo los que no tenían stock en el carrito
-    cart.products = cart.products.filter(item => failedProducts.includes(item.productId));
+    cart.products = cart.products.filter((item) =>
+      failedProducts.includes(item.productId)
+    );
 
     res.json({
       message: "Compra procesada.",

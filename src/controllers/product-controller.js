@@ -5,7 +5,7 @@ import {
   updateProductService,
   deleteProductService,
   purchaseProductService,
-} from "../services/product-service.js";
+} from "../services/product-services.js";
 
 export const createProduct = async (req, res) => {
   const newProduct = await createProductService(req.body);
@@ -44,4 +44,3 @@ export const purchaseProduct = async (req, res) => {
 
   res.json({ message: "Compra realizada con éxito.", product });
 };
-

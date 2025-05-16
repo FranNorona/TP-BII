@@ -1,6 +1,6 @@
 import { Product } from "../dao/models/product-model.js";
 
-class ProducRepository {
+class ProductRepository {
   async createProduct(productData) {
     return await Product.create(productData);
   }
@@ -22,4 +22,4 @@ class ProducRepository {
   }
 }
 
-export const productRepository = new productRepository();
+export const productRepository = new ProductRepository();

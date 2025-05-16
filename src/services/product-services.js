@@ -1,4 +1,4 @@
-import { productRepository } from "../repository/product-repository";
+import { productRepository } from "../repository/product-repository.js";
 
 export const createProductService = async (productData) => {
   return await productRepository.createProduct(productData);
@@ -27,5 +27,7 @@ export const purchaseProductService = async (id) => {
     throw new Error("Producto agotado o no disponible.");
   }
 
-  return await productRepository.updateProduct(id, { stock: product.stock - 1 });
+  return await productRepository.updateProduct(id, {
+    stock: product.stock - 1,
+  });
 };

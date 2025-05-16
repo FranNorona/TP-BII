@@ -4,5 +4,5 @@ import "dotenv/config";
 const SECRET_KEY = process.env.SECRET_KEY;
 
 export const generateResetToken = (email) => {
-  return jwt.sign({ email }, SECRET_KEY, { expiresIn: "1h" });
+  return jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: "1h" });
 };

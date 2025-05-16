@@ -1,12 +1,12 @@
-import { TicketRepository } from "../repository/ticket-repository";
+import TicketRepository from "../repository/ticket-repository.js";
 import { v4 as uuidv4 } from "uuid";
 
-export const generateTicketService = async (purchaser, amount ) => {
-    const ticketData = {
-        code: uuidv4(),
-        amount,
-        purchaser,
-    };
+export const generateTicketService = async (purchaser, amount) => {
+  const ticketData = {
+    code: uuidv4(),
+    amount,
+    purchaser,
+  };
 
-    return await TicketRepository.createTicket(ticketData);
+  return await TicketRepository.createTicket(ticketData);
 };

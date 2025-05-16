@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { authorizeRole, authorizeMultipleRoles } from "../middlewares/auth-middleware.js";
+import {
+  authenticateJWT,
+  authorizeRole,
+  authorizeMultipleRoles,
+} from "../middlewares/auth-middleware.js";
 import {
   createProduct,
   getAllProducts,
@@ -11,14 +15,19 @@ import {
 
 const router = Router();
 
-router.post("/", authorizeRole("admin"), createProduct);
-router.post("/sell", authorizeRole("premium"), createProduct);
-router.post("/:id/purchase", authorizeMultipleRoles(["user", "premium"]), purchaseProduct);
+router.post("/", authenticateJWT, authorizeRole("admin"), createProduct);
+router.post("/sell", authenticateJWT, authorizeRole("premium"), createProduct);
+router.post(
+  "/:id/purchase",
+  authenticateJWT,
+  authorizeMultipleRoles(["user", "premium"]),
+  purchaseProduct
+);
 
 router.get("/", getAllProducts);
 router.get("/:id", getProductById);
 
-router.put("/:id", authorizeRole("admin"), updateProduct);
-router.delete("/:id", authorizeRole("admin"), deleteProduct);
+router.put("/:id", authenticateJWT, authorizeRole("admin"), updateProduct);
+router.delete("/:id", authenticateJWT, authorizeRole("admin"), deleteProduct);
 
 export default router;

@@ -11,7 +11,7 @@ export const getCartByUserIdService = async (userId) => {
 
 export const addProductToCartService = async (userId, productId, quantity) => {
   const product = await productRepository.getProductById(productId);
-  console.log("product", product);
+
   if (!product || product.stock < quantity) {
     throw new Error("Stock insuficiente o producto no encontrado.");
   }
@@ -21,8 +21,6 @@ export const addProductToCartService = async (userId, productId, quantity) => {
   if (!cart) {
     cart = await cartRepository.createCart(userId);
   }
-
-  console.log(cart);
 
   return await cartRepository.addProductToCart(userId, productId, quantity);
 };

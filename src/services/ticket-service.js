@@ -10,3 +10,7 @@ export const generateTicketService = async (purchaser, amount) => {
 
   return await TicketRepository.createTicket(ticketData);
 };
+
+export const getTicketsService = async () => {
+  return await TicketRepository.getAllTickets();
+};

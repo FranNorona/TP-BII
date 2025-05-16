@@ -4,6 +4,7 @@ import sessionRouter from "./sessions-router.js";
 import authRouter from "./auth-router.js";
 import productRouter from "./product-router.js";
 import cartRouter from "./cart-router.js";
+import ticketRouter from "./ticket-router.js";
 
 const router = express.Router();
 
@@ -12,5 +13,6 @@ router.use("/api/sessions", sessionRouter);
 router.use("/", authRouter);
 router.use("/api/products", productRouter);
 router.use("/api/cart", cartRouter);
+router.use("/api/tickets", ticketRouter);
 
 export default router;

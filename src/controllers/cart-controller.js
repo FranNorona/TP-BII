@@ -34,16 +34,15 @@ export const addProductToCart = async (req, res) => {
   try {
     const { userId, productId } = req.params;
     const { quantity } = req.body;
-    console.log(userId, productId, quantity);
+
     const updatedCart = await addProductToCartService(
       new mongoose.Types.ObjectId(userId),
       new mongoose.Types.ObjectId(productId),
       quantity
     );
-    console.log(updatedCart);
+
     res.json(updatedCart);
   } catch (error) {
-    console.log(error);
     res.status(400).json({ error: error.message });
   }
 };
